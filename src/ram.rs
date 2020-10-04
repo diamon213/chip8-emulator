@@ -1,4 +1,5 @@
 struct Ram {
+    // 4K Memory, 4096 (0x100)
     mem: [u8; 4096]
 }
 
