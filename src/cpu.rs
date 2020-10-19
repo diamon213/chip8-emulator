@@ -1,6 +1,6 @@
-//TODO import display and font set
+use crate::rand::ComplementaryMultiplyWithCarryGen;
 use crate::keypad::Keypad;
-//TODO import ComplementaryMultiplyWithCarryGen
+use crate::display::{Display, FONT_SET};
 
 pub const PROGRAM_START: u16 = 0x200;
 
@@ -21,12 +21,10 @@ pub struct Cpu {
     pub dt: u8,
     // keypad
     pub keypad: Keypad,
-
     // display
-    //TODO pub display: Display,
-
+    pub display: Display,
     // random number generator
-    //TODO pub rand: ComplementaryMultiplyWithCarryGen
+    pub rand: ComplementaryMultiplyWithCarryGen
 }
 
 impl Cpu {
@@ -40,8 +38,8 @@ impl Cpu {
             sp: 0,
             dt: 0,
             keypad: Keypad::new(),
-            //TODO display
-            //TODO rand
+            display: Display::new() ,
+            rand: ComplementaryMultiplyWithCarryGen::New(1)
         }
     }
 
@@ -53,10 +51,11 @@ impl Cpu {
         self.ret_stack = Vec::<u16>::new();
         self.sp = 0;
         self.dt = 0;
-
-        //TODO self.rng = rand::thread_rng();
-        //TODO self.display.cls();
-        //TODO fill memory with font set
+        self.rng = rand::thread_rng();
+        self.display.cls();
+        for i in 0..80 {
+            self.memory[i] = FONT_SET[i];
+        }
     }
 
     pub fn execute_cycle(&mut self) {
